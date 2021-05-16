@@ -1,0 +1,280 @@
+import json
+import discord
+from discord.utils import get
+from discord.ext import commands
+import random
+
+bot = commands.Bot(command_prefix="%")
+
+funFact = ["l'eau mouille",
+           "le feu brule",
+           "Lorsque vous volez, vous ne touchez pas le sol",
+           "Winter is coming",
+           "Il n'est pas possible d'aller dans l'espace en restant sur terre",
+           "la terre est ronde... Je crois",
+           "la moitie de 2 est 1",
+           "7 est un nombre heureux",
+           "les allemands viennent d'allemagne",
+           "le coronavirus est un virus se repandant en Europe, en avez vous entendu parler ?",
+           "Le plus grand complot de l'humanite est *FBI OPEN UP !*",
+           "pourquoi lisez vous ça ?",
+           "les oiseaux ça vole"]
+
+colo = [0xff0000,
+        0x0f4c81,
+        0x708a8c,
+        0x420dab,
+        0xbada55,
+        0xe62272,
+        0xffe09d,
+        0xf3f118,
+        0x19569b,
+        0xdc2502]
+
+
+warnings = {}
+raison = {}
+
+#with open('warning.json', 'r') as infile:
+#    warning = json.load(infile)
+#with open('raison.json', 'r') as infile:
+#    raison = json.load(infile)
+    
+
+@bot.event
+async def on_ready():
+    print("ready")
+    
+
+
+
+@bot.command()
+async def serverinfo(ctx):
+    server = ctx.guild
+    nombrechan = len(server.text_channels)
+    nombrevoc = len(server.voice_channels)
+    serverDescription = server.description
+    nombrePelo = server.member_count
+    serverName = server.name
+    
+    embed = discord.Embed(title="__**Serveur Info**__", description=serverName, color= random.choice(colo))
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.add_field(name="**nombre de Débilus :** ", value=nombrePelo, inline=False)
+    embed.add_field(name="**nombre de chan :** ", value=nombrechan, inline=True)
+    embed.add_field(name="**nombre de voc :** ", value=nombrevoc, inline=True)
+    embed.set_footer(text=random.choice(funFact))
+    
+    await ctx.send(embed = embed)
+    
+    
+
+
+@bot.command()
+@commands.has_permissions(manage_messages=True)
+async def clear(ctx, nombre: int):
+    await ctx.channel.purge(limit=nombre + 1)
+
+
+
+@bot.command()
+@commands.has_permissions(kick_members=True)
+async def kick(ctx, user:discord.User, *reason):
+    
+    reason = " ".join(reason)
+    
+    if reason == "":
+        embed = discord.Embed(title="__**High Kick dans sa face**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+        
+    else:
+        embed = discord.Embed(title="__**High Kick dans sa face**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Raison :** ", value=reason, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+        
+    await ctx.send(embed=embed)
+    await ctx.guild.kick(user, reason = reason)
+    
+    
+
+@bot.command()
+@commands.has_permissions(ban_members=True)
+async def ban(ctx, user: discord.User, *reason):
+    
+    reason = " ".join(reason)
+    
+    if reason == "":
+        embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+        
+    else:
+        embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Raison :** ", value=reason, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+
+
+
+@bot.command()
+@commands.has_any_role(814075252463632404)
+async def warn(ctx, membre: discord.User, *reason):
+    
+    iden = str(membre.id)
+    reason = " ".join(reason)
+    
+    if reason == "":
+        reason = "pas de motif"
+    
+    if iden not in warnings:
+        warnings[iden] = 0
+
+    if iden not in raison:
+        raison[iden] = ""
+        
+    warnings[iden] = warnings[iden] + 1
+    raison[iden] = raison[iden] + f"warn n° {warnings[iden]} : " + reason + ", "
+    
+    embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.add_field(name="**Débilus :** ", value=membre.name, inline=True)
+    embed.add_field(name="**Raison :** ", value=reason, inline=True)
+    embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+    embed.set_footer(text=random.choice(funFact))
+    
+    await ctx.send(embed = embed)
+    
+    if warnings[iden] == 3:
+        await kick(ctx, membre, reason)
+        
+    if warnings[iden] >= 4:
+        await ban(ctx, membre, reason)
+        
+    with open('warnings.json', 'w') as outfile:
+        json.dump(warnings, outfile)
+    with open('raison.json', 'w') as outfile:
+        json.dump(raison, outfile)
+        
+
+
+@bot.command()
+@commands.has_any_role(814075252463632404)
+async def clearwarn(ctx, user: discord.User):
+    
+    iden = str(user.id)
+    warnings[iden] = 0
+    raison[iden] = ""
+    
+    await ctx.send(f"le débilus {user} a {warnings[iden]} warn")
+    
+    with open('warnings.json', 'w') as outfile:
+        json.dump(warnings, outfile)
+    with open('raison.json', 'w') as outfile:
+        json.dump(raison, outfile)
+
+
+
+@bot.command()
+@commands.has_any_role(814075252463632404)
+async def mute(ctx, member: discord.Member, *reason):
+
+    reason = " ".join(reason)
+    role = get(member.guild.roles, name=768784985703579678)
+    await member.add_role(role)
+    
+    if reason =="":
+        embed = discord.Embed(title="__**Mute**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+    
+    else:
+        embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Raison :** ", value=reason, inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+        
+    await ctx.send(embed=embed)
+    
+
+
+@bot.command()
+@commands.has_any_role(814075252463632404)
+async def unmute(ctx, member: discord.Member):
+    
+    role = get(member.guild.roles, name=768784985703579678)
+    await member.remove_role(role)
+   
+    embed = discord.embed(title="__**Mute**__", description = "Au degnouf le pignouf !", color=random.choice(colo))
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+    embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+    embed.set_footer(text=random.choice(funFact))
+        
+    await ctx.send(embed=embed)
+        
+        
+@bot.command()
+@commands.has_any_role(814075252463632404)
+async def warninfo(ctx, user: discord.User):
+
+    iden = str(user.id)
+    
+    if raison[iden] == "":
+        embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+        embed.set_thumbnail(url=ctx.guild.icon_url)
+        embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+        embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+        embed.add_field(name="**Nombre de warn :** ", value=warnings[iden], inline=True)
+        embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+        embed.set_footer(text=random.choice(funFact))
+        
+    embed = discord.Embed(title="__**Got Yeeted**__", description = "Au gnouf le pignouf !", color=random.choice(colo))
+    embed.set_thumbnail(url=ctx.guild.icon_url)
+    embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.add_field(name="**Débilus :** ", value=user.name, inline=True)
+    embed.add_field(name="**Nombre de warn :** ", value=warnings[iden], inline=True)
+    embed.add_field(name="**raison des warns** : ", value=raison[iden], inline=True)
+    embed.add_field(name="**Modérateur :** ", value=ctx.author.name, inline=False)
+    embed.set_footer(text=random.choice(funFact))
+    
+    await ctx.send(embed = embed)
+    
+    await ctx.send(f'nb warn = {warnings.iden}')
+    
+    
+@bot.command()
+async def version(ctx):
+
+    embed = discord.Embed(title="__**Version**__", description = "Le meilleur bot ever", color=random.choice(colo))
+    embed.set_thumbnail(url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
+    embed.add_field(name="**Createur :** ", value="Lophim", inline=False)
+    embed.add_field(name="**Version du bot :** ", value="1.0", inline=False)
+    embed.add_field(name="**Github** : ", value="https://github.com/Dophim/LophBot.git", inline=False)
+    embed.set_footer(text=random.choice(funFact))
+        
+    await ctx.send(embed=embed)
+        
+bot.run("Nzc0MjQ0ODg3OTU2MjkxNjE0.X6U9vg.AOb3Zh6vIW_G6-7oFRe8dmZvTCc")
