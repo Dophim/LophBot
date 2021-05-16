@@ -277,4 +277,4 @@ async def version(ctx):
         
     await ctx.send(embed=embed)
         
-bot.run("Nzc0MjQ0ODg3OTU2MjkxNjE0.X6U9vg.AOb3Zh6vIW_G6-7oFRe8dmZvTCc")
+bot.run("Token")
