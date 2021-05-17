@@ -324,6 +324,7 @@ async def aide(ctx):
     embed.add_field(name = "ban [ping] {raison} : ", value = "permet de ban un membre, raison optionnel", inline = False)
     embed.add_field(name = "serverinfo : ", value = "permet de connaitre l'etat du serveur", inline = False)
     embed.add_field(name = "version : ", value = "permet de connaitre la version du bot", inline = False)
+    embed.add_field(name = "clear [nombre] : ", value = "permet clear un certain nombre de message", inline = False)
     embed.set_footer(text = random.choice(funFact))
     
     await ctx.send(embed=embed)
