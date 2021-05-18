@@ -1,0 +1,5 @@
+    if not (ctx.guild.get_role(int(serveur[str(ctx.guild.id)].split(", ")[0])) in ctx.author.roles or ctx.guild.get_role(int(serveur[str(ctx.guild.id)].split(", ")[1])) in ctx.author.roles) :
+        await ctx.send("je te baise lophim, je suis un bot debile")
+        return
+
+    else:
