@@ -332,6 +332,8 @@ async def version(ctx):
     embed.add_field(name="**Createur :** ", value="Lophim", inline=False)
     embed.add_field(name="**Version du bot :** ", value="1.2", inline=False)
     embed.add_field(name="**Github** : ", value="https://github.com/Dophim/LophBot", inline=False)
+    embed.add_field(name="**Discord du bot** : ", value="https://discord.gg/24VRqt46wP", inline=False)
+    embed.add_field(name="**Invitation du bot** : ", value="https://discord.com/api/oauth2/authorize?client_id=774244887956291614&permissions=8&&scope=bot", inline=False)
     embed.set_footer(text=random.choice(funFact))
 
     await ctx.send(embed=embed)
@@ -343,10 +345,8 @@ async def aide(ctx):
     embed = discord.Embed(title="__**Aide**__", description="de l'aide pour le bot", color=random.choice(colo))
     embed.set_thumbnail(url=ctx.guild.icon_url)
     embed.set_author(name="LophBot", icon_url="https://cdn.discordapp.com/emojis/739946136890245190.png?v=1")
-    embed.add_field(name="mute/unmute [ping] {raison} : ", value="permet de mute/unmute un membre, raison optionnel",
-                    inline=False)
-    embed.add_field(name="warn [ping] {raison} : ",
-                    value="permet de warn un membre, raison optionnel. 3 warn = kick, 4 warn = ban", inline=False)
+    embed.add_field(name="mute/unmute [ping] {raison} : ", value="permet de mute/unmute un membre, raison optionnel",inline=False)
+    embed.add_field(name="warn [ping] {raison} : ",value="permet de warn un membre, raison optionnel. 3 warn = kick, 4 warn = ban", inline=False)
     embed.add_field(name="warninfo [ping] : ", value="permet de connaitre les warns d'un membre", inline=False)
     embed.add_field(name="clearwarn [ping] : ", value="permet d'enlever les warn d'un membre", inline=False)
     embed.add_field(name="kick [ping] {raison} : ", value="permet de kick un membre, raison optionnel", inline=False)
@@ -354,8 +354,7 @@ async def aide(ctx):
     embed.add_field(name="serverinfo : ", value="permet de connaitre l'etat du serveur", inline=False)
     embed.add_field(name="version : ", value="permet de connaitre la version du bot", inline=False)
     embed.add_field(name="clear [nombre] : ", value="permet de clear un certain nombre de message", inline=False)
-    embed.add_file(name="setup : ",
-                   valut="permet de set les role de moderateur et de staff dans la base de donnée du bot", inline=False)
+    embed.add_field(name="setup : ",value="permet de set les role de moderateur et de staff dans la base de donnée du bot", inline=False)
     embed.set_footer(text=random.choice(funFact))
 
     await ctx.send(embed=embed)
@@ -391,6 +390,7 @@ async def setup(ctx):
         json.dump(serveur, outfile)
 
     await ctx.send("la demande a bien ete prise en compte")
-
-
+        
 bot.run("Token")
+
+
